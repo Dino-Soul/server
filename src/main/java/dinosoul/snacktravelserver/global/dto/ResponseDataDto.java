@@ -1,4 +1,15 @@
 package dinosoul.snacktravelserver.global.dto;
 
-public class ResponseDataDto {
+import lombok.*;
+
+import static lombok.AccessLevel.*;
+
+@Getter
+public class ResponseDataDto<T> {
+
+    private T data;
+
+    public ResponseDataDto(T data) {
+        this.data = data;
+    }
 }
