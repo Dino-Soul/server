@@ -65,15 +65,13 @@ public class WebSecurityFilter {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(WebSecurityFilter::stateless)
-                .authorizeHttpRequests(authorizationRequest -> {
-                    authorizationRequest
-                            .requestMatchers("/auth/login", "/auth/signup").permitAll()
-                            .requestMatchers(GET, "/snack").permitAll()
-                            .requestMatchers(GET, "/travlespot").permitAll()
-                            .requestMatchers(GET, "/foodspot").permitAll()
-                            .requestMatchers(GET, "/comment/snack/{snackId}").permitAll()
-                            .anyRequest().authenticated();
-                })
+                .authorizeHttpRequests(authorizationRequest -> authorizationRequest
+                        .requestMatchers("/auth/login", "/auth/signup").permitAll()
+                        .requestMatchers(GET, "/snack").permitAll()
+                        .requestMatchers(GET, "/travlespot").permitAll()
+                        .requestMatchers(GET, "/foodspot").permitAll()
+                        .requestMatchers(GET, "/comment/snack/{snackId}").permitAll()
+                        .anyRequest().authenticated())
                 .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(authenticationEntryPoint()))
                 .addFilter(webConfig.corsFilter())
                 .addFilterBefore(jwtAuthenticationFilter(), JwtAuthenticationFilter.class)

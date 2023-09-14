@@ -17,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -35,22 +36,26 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String accessToken = jwtProvider.getToken(request);
-        String extractToken = jwtProvider.extractToken(accessToken);
-        if (isNotTimeoutToken(extractToken)) {
-            ResponseHttpStatusUtil instance = ResponseHttpStatusUtil.getInstance();
-            HttpStatusEnum httpStatus = HttpStatusEnum.TOKEN_TIMEOUT;
-            ResponseDataDto<ResponseStatusDto> responseDataDto = instance.generatedResponseDto(httpStatus);
 
-            response.setStatus(httpStatus.getStatusCode());
-            response.setContentType(APPLICATION_JSON_VALUE);
-            response.getWriter().write(objectMapper.writeValueAsString(responseDataDto));
-        }
+        if (StringUtils.hasText(accessToken)) {
+            accessToken = jwtProvider.extractToken(accessToken);
 
-        try {
-            String subject = jwtProvider.getUserInfo(extractToken).getSubject();
-            setAuthentication(subject);
-        } catch (Exception e) {
-            return;
+            if (isNotTimeoutToken(accessToken)) {
+                ResponseHttpStatusUtil instance = ResponseHttpStatusUtil.getInstance();
+                HttpStatusEnum httpStatus = HttpStatusEnum.TOKEN_TIMEOUT;
+                ResponseDataDto<ResponseStatusDto> responseDataDto = instance.generatedResponseDto(httpStatus);
+
+                response.setStatus(httpStatus.getStatusCode());
+                response.setContentType(APPLICATION_JSON_VALUE);
+                response.getWriter().write(objectMapper.writeValueAsString(responseDataDto));
+            }
+
+            try {
+                String subject = jwtProvider.getUserInfo(accessToken).getSubject();
+                setAuthentication(subject);
+            } catch (Exception e) {
+                return;
+            }
         }
 
         filterChain.doFilter(request, response);

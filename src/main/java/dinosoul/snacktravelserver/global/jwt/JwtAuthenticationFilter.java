@@ -69,15 +69,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         jwtProvider.addJwtToHeader(accessToken, response);
     }
 
-    private ResponseDataDto<ResponseStatusDto> generatedResponseDto(HttpStatusEnum httpStatus) {
-        ResponseStatusDto responseStatusDto = ResponseStatusDto.builder()
-                .message(httpStatus.getMessage())
-                .statusCode(httpStatus.getStatusCode())
-                .build();
-
-        return new ResponseDataDto<>(responseStatusDto);
-    }
-
     private JwtUserDetailsImpl getJwtUserDetailsImpl(Authentication authResult) {
         return (JwtUserDetailsImpl) authResult.getPrincipal();
     }
