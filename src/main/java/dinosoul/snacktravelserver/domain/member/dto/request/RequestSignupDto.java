@@ -1,4 +1,4 @@
-package dinosoul.snacktravelserver.domain.member.dto;
+package dinosoul.snacktravelserver.domain.member.dto.request;
 
 import lombok.Getter;
 

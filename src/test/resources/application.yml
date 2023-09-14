@@ -11,3 +11,9 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+jwt:
+  secret:
+    key: ${TEST_JWT_SECRET_KEY}
+  expire:
+    length: ${TEST_JWT_EXPIRE_LENGTH}

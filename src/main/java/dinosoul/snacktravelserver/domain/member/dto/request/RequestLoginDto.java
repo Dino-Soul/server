@@ -1,4 +1,4 @@
-package dinosoul.snacktravelserver.global.dto;
+package dinosoul.snacktravelserver.domain.member.dto.request;
 
 import lombok.*;
 
@@ -8,9 +8,9 @@ import static lombok.AccessLevel.*;
 @Builder
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PROTECTED)
-public class ResponseStatusDto {
+public class RequestLoginDto {
 
-    private String message;
-    private Integer statusCode;
+    private String nickname;
+    private String password;
 
 }
