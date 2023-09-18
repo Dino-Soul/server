@@ -18,7 +18,6 @@ import static java.nio.charset.StandardCharsets.*;
 public class JwtProvider {
 
     private static final String TOKEN_TYPE = "Bearer ";
-
     private final Key secretKey;
     private final long TOKEN_EXPIRE_IN;
     private final String HEADER_NAME = "Authorization";
