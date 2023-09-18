@@ -1,8 +1,10 @@
 package dinosoul.snacktravelserver.domain.member.entity;
 
+import dinosoul.snacktravelserver.domain.member.dto.request.RequestInformationDto;
 import dinosoul.snacktravelserver.global.util.Timestamped;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import static jakarta.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
@@ -31,4 +33,9 @@ public class Member extends Timestamped {
     @Column
     private String profileUrl;
 
+    public void update(RequestInformationDto requestInformationDto, String updateProfileImageUrl) {
+        this.nickname = requestInformationDto.getNickname();
+        this.password = requestInformationDto.getPassword();
+        this.profileUrl = updateProfileImageUrl;
+    }
 }

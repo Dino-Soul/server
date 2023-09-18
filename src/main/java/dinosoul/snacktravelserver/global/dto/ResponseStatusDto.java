@@ -7,7 +7,7 @@ import static lombok.AccessLevel.*;
 @Getter
 @Builder
 @NoArgsConstructor(access = PROTECTED)
-@AllArgsConstructor
+@AllArgsConstructor(access = PROTECTED)
 public class ResponseStatusDto {
 
     private String message;

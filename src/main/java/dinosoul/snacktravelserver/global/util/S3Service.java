@@ -59,7 +59,24 @@ public class S3Service {
         log.info("파일 생성: " + fileName);
     }
 
-    public void delete(List<String> imageUrlList) {
+    public void delete(String imageUrl) {
+        if (StringUtils.hasText(imageUrl)) {
+            String fileName = extractObjectKeyFromUrl(imageUrl);
+            try {
+                String decodedFileName = URLDecoder.decode(fileName, StandardCharsets.UTF_8);
+                if (amazonS3.doesObjectExist(bucket, decodedFileName)) {
+                    amazonS3.deleteObject(bucket, decodedFileName);
+                    log.info("파일 삭제: " + decodedFileName);
+                } else {
+                    log.warn("존재하지 않는 파일: " + decodedFileName);
+                }
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("삭제 실패");
+            }
+        }
+    }
+
+    public void deletes(List<String> imageUrlList) {
         for (String imageUrl : imageUrlList) {
             if (StringUtils.hasText(imageUrl)) {
                 String fileName = extractObjectKeyFromUrl(imageUrl);
