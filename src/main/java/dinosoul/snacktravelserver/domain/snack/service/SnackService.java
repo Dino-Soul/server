@@ -33,7 +33,7 @@ public class SnackService {
         String videoUrl = s3Service.upload(video);
         Snack snack = new Snack(requestSnackDto, videoUrl, member);
         snackRepository.save(snack);
-        return new ResponseStatusDto(OK.getMessage(), OK.getStatusCode());
+        return ResponseStatusDto.builder().message(OK.getMessage()).statusCode(OK.getStatusCode()).build();
     }
 
     public ResponseDataDto<?> searchSnack() {
@@ -55,6 +55,6 @@ public class SnackService {
             throw new IllegalArgumentException("스낵 삭제 권한이 없습니다.");
         }
         snackRepository.delete(findSnack);
-        return new ResponseStatusDto(OK.getMessage(), OK.getStatusCode());
+        return ResponseStatusDto.builder().message(OK.getMessage()).statusCode(OK.getStatusCode()).build();
     }
 }
