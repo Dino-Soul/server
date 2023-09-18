@@ -40,8 +40,9 @@ public class JwtProvider {
                 .setSubject(member.getId().toString())
                 .setIssuedAt(now)
                 .setExpiration(validateTime)
-                .claim("profileUrl", member.getProfileUrl())
+                .claim("loginId", member.getLoginId())
                 .claim("nickname", member.getNickname())
+                .claim("profileUrl", member.getProfileUrl())
                 .signWith(secretKey, HS256)
                 .compact();
     }
@@ -71,6 +72,12 @@ public class JwtProvider {
                 .getSubject();
 
         return Long.parseLong(idValue);
+    }
+
+    public String getLoginId(String token) {
+        return getClaimsJws(token)
+                .getBody()
+                .get("loginId", String.class);
     }
 
     public String getNickname(String token) {
