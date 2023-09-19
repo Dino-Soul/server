@@ -1,11 +1,15 @@
 package dinosoul.snacktravelserver.domain.snack.entity;
 
+import dinosoul.snacktravelserver.domain.comment.entity.Comment;
 import dinosoul.snacktravelserver.domain.member.entity.Member;
 import dinosoul.snacktravelserver.domain.snack.dto.RequestSnackDto;
 import dinosoul.snacktravelserver.global.util.Timestamped;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -20,9 +24,6 @@ public class Snack extends Timestamped {
     private Long id;
 
     @Column
-    private Category category;
-
-    @Column
     private String content;
 
     @Column
@@ -35,10 +36,11 @@ public class Snack extends Timestamped {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    private Long views;
+    @OneToMany
+    @JoinColumn(name = "comment_id")
+    List<Comment> commentList = new ArrayList<>();
 
     public Snack(RequestSnackDto requestSnackDto, String videoUrl, Member member) {
-        this.category = requestSnackDto.getCategory();
         this.content = requestSnackDto.getContent();
         this.location = requestSnackDto.getLocation();
         this.videoUrl = videoUrl;

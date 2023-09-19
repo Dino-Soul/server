@@ -29,5 +29,4 @@ public class MemberController {
                                                @AuthenticationPrincipal JwtUserDetailsImpl jwtUserDetails) {
         return memberService.informationChange(requestInformationDto, profileImage, jwtUserDetails.getMember());
     }
-
 }

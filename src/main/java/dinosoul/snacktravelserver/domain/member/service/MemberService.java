@@ -10,12 +10,15 @@ import dinosoul.snacktravelserver.global.globalenum.HttpStatusEnum;
 import dinosoul.snacktravelserver.global.util.IdenticonService;
 import dinosoul.snacktravelserver.global.util.S3Service;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import static dinosoul.snacktravelserver.global.globalenum.HttpStatusEnum.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MemberService {
@@ -23,6 +26,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final IdenticonService identiconService;
     private final S3Service s3Service;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public ResponseStatusDto signup(RequestSignupDto requestSignupDto) {
@@ -34,12 +38,13 @@ public class MemberService {
 
         Member member = Member.builder()
                 .loginId(requestSignupDto.getLoginId())
-                .password(requestSignupDto.getPassword())
+                .password(passwordEncoder.encode(requestSignupDto.getPassword()))
                 .nickname(requestSignupDto.getNickname())
                 .profileUrl(defaultProfileUrl)
                 .build();
 
         memberRepository.save(member);
+
         return ResponseStatusDto.builder()
                 .message(OK.getMessage())
                 .statusCode(OK.getStatusCode())
@@ -61,7 +66,7 @@ public class MemberService {
 
         String updateProfileImageUrl = s3Service.upload(profileImage);
 
-        findMember.update(requestInformationDto, updateProfileImageUrl);
+        findMember.update(requestInformationDto.getNickname(), passwordEncoder.encode(requestInformationDto.getPassword()), updateProfileImageUrl);
 
         return ResponseStatusDto.builder()
                 .message(OK.getMessage())

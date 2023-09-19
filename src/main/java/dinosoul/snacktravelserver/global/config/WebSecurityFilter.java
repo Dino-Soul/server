@@ -6,6 +6,7 @@ import dinosoul.snacktravelserver.global.jwt.JwtAuthorizationFilter;
 import dinosoul.snacktravelserver.global.jwt.JwtUserDetailsServiceImpl;
 import dinosoul.snacktravelserver.global.util.JwtProvider;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,7 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import static org.springframework.http.HttpMethod.*;
 import static org.springframework.security.config.http.SessionCreationPolicy.*;
-
+@Slf4j
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
