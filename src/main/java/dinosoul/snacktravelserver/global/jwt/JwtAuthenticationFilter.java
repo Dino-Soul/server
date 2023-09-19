@@ -14,6 +14,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -24,7 +25,7 @@ import java.io.IOException;
 
 import static dinosoul.snacktravelserver.global.globalenum.HttpStatusEnum.*;
 import static org.springframework.http.MediaType.*;
-
+@Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -47,7 +48,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     private Authentication authenticationRequest(RequestLoginDto requestLoginDto) {
         return getAuthenticationManager().authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        requestLoginDto.getNickname(),
+                        requestLoginDto.getLoginId(),
                         requestLoginDto.getPassword(),
                         null
                 )

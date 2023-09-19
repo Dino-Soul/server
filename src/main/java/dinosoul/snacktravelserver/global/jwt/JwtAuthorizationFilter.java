@@ -11,6 +11,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,7 +24,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 import static org.springframework.http.MediaType.*;
-
+@Slf4j
 @RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
@@ -36,7 +37,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String accessToken = jwtProvider.getToken(request);
-
         if (StringUtils.hasText(accessToken)) {
             accessToken = jwtProvider.extractToken(accessToken);
 
@@ -52,6 +52,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
             try {
                 String subject = jwtProvider.getUserInfo(accessToken).getSubject();
+                System.out.println(subject);
                 setAuthentication(subject);
             } catch (Exception e) {
                 return;

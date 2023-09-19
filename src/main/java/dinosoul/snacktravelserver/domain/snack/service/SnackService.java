@@ -11,6 +11,7 @@ import dinosoul.snacktravelserver.global.globalenum.HttpStatusEnum;
 import dinosoul.snacktravelserver.global.security.UserDetailsImpl;
 import dinosoul.snacktravelserver.global.util.S3Service;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import java.util.List;
 
 import static dinosoul.snacktravelserver.global.globalenum.HttpStatusEnum.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class SnackService {
@@ -28,12 +30,15 @@ public class SnackService {
     private final SnackRepository snackRepository;
     private final S3Service s3Service;
 
-    @Transactional
     public ResponseStatusDto createSnack(RequestSnackDto requestSnackDto, MultipartFile video, Member member) {
+        log.info("서비스는 들어오긴하는가?");
         String videoUrl = s3Service.upload(video);
         Snack snack = new Snack(requestSnackDto, videoUrl, member);
         snackRepository.save(snack);
-        return ResponseStatusDto.builder().message(OK.getMessage()).statusCode(OK.getStatusCode()).build();
+        return ResponseStatusDto.builder()
+                .message(CREATED.getMessage())
+                .statusCode(CREATED.getStatusCode())
+                .build();
     }
 
     public ResponseDataDto<?> searchSnack() {

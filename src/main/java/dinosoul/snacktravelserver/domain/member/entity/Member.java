@@ -1,10 +1,15 @@
 package dinosoul.snacktravelserver.domain.member.entity;
 
+import dinosoul.snacktravelserver.domain.comment.entity.Comment;
 import dinosoul.snacktravelserver.domain.member.dto.request.RequestInformationDto;
 import dinosoul.snacktravelserver.global.util.Timestamped;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static jakarta.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
@@ -12,8 +17,8 @@ import static lombok.AccessLevel.*;
 @Entity
 @Getter
 @Builder
-@NoArgsConstructor(access = PROTECTED)
-@AllArgsConstructor(access = PROTECTED)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Member extends Timestamped {
 
     @Id
@@ -33,9 +38,13 @@ public class Member extends Timestamped {
     @Column
     private String profileUrl;
 
-    public void update(RequestInformationDto requestInformationDto, String updateProfileImageUrl) {
-        this.nickname = requestInformationDto.getNickname();
-        this.password = requestInformationDto.getPassword();
+    @OneToMany
+    @JoinColumn(name = "comment_id")
+    private List<Comment> commentList = new ArrayList<>();
+
+    public void update(String nickname, String password, String updateProfileImageUrl) {
+        this.nickname = nickname;
+        this.password = password;
         this.profileUrl = updateProfileImageUrl;
     }
 }

@@ -21,9 +21,9 @@ jwt:
 cloud:
   aws:
     credentials:
-      access-key: ${S3_ACCESS_KEY}
-      secret-key: ${S3_SECRET_KEY}
+      access-key: ${TEST_S3_ACCESS_KEY}
+      secret-key: ${TEST_S3_SECRET_KEY}
     s3:
-      bucket: ${S3_BUCKET}
+      bucket: ${TEST_S3_BUCKET}
     region:
-      static: ${S3_REGION}
+      static: ${TEST_S3_REGION}

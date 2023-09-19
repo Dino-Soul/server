@@ -10,7 +10,7 @@ import static lombok.AccessLevel.*;
 @AllArgsConstructor(access = PROTECTED)
 public class RequestLoginDto {
 
-    private String nickname;
+    private String loginId;
     private String password;
 
 }
