@@ -36,6 +36,6 @@ public class Comment extends Timestamped {
     private Member member;
 
     public void update(RequestCommentDto requestCommentDto) {
-        this.content = requestCommentDto.getComment();
+        this.content = requestCommentDto.getContent();
     }
 }

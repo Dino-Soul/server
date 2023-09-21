@@ -9,5 +9,5 @@ import static lombok.AccessLevel.*;
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PROTECTED)
 public class RequestCommentDto {
-    private String comment;
+    private String content;
 }
