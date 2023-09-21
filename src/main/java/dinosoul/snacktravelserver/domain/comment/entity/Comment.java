@@ -28,9 +28,8 @@ public class Comment extends Timestamped {
     @Column
     private String content;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "snack_id")
-    private Snack snack;
+    @Column(name = "snack_id")
+    private Long snackId;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")

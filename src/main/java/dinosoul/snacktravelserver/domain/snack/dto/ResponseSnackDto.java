@@ -14,17 +14,17 @@ public class ResponseSnackDto {
     private String content;
     private String videoUrl;
     private String nickname;
-//    private Long commentCount;
-//    private Long likeCount;
-//    private Boolean isLike;
+    private Double latitude;
+    private Double longitude;
+    private String profileImageUrl;
 
     public ResponseSnackDto(Snack snack) {
         this.snackId = snack.getId();
         this.content = snack.getContent();
         this.videoUrl = snack.getVideoUrl();
         this.nickname = snack.getMember().getNickname();
-//        this.commentCount = commentCount;
-//        this.likeCount = likeCount;
-//        this.isLike = isLike;
+        this.latitude = snack.getLatitude();
+        this.longitude = snack.getLongitude();
+        this.profileImageUrl = snack.getProfileImageUrl();
     }
 }
