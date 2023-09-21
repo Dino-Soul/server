@@ -1,6 +1,7 @@
 package dinosoul.snacktravelserver.domain.comment.service;
 
 import dinosoul.snacktravelserver.domain.comment.dto.RequestCommentDto;
+import dinosoul.snacktravelserver.domain.comment.dto.RequestSearchCommentDto;
 import dinosoul.snacktravelserver.domain.comment.dto.ResponseCommentDto;
 import dinosoul.snacktravelserver.domain.comment.entity.Comment;
 import dinosoul.snacktravelserver.domain.comment.repository.CommentRepository;
@@ -32,7 +33,7 @@ public class CommentService {
         Comment comment = Comment.builder()
                 .nickname(member.getNickname())
                 .content(requestCommentDto.getComment())
-                .snack(findSnack)
+                .snackId(snackId)
                 .build();
 
         commentRepository.save(comment);
@@ -43,8 +44,8 @@ public class CommentService {
                 .build();
     }
 
-    public ResponseDataDto<?> searchComment(Long snackId) {
-        List<Comment> commentList = commentRepository.findAllBySnackId(snackId);
+    public ResponseDataDto<?> searchComment(RequestSearchCommentDto requestSearchCommentDto) {
+        List<Comment> commentList = commentRepository.findAllBySnackId(requestSearchCommentDto.getSnackId());
         List<ResponseCommentDto> responseCommentDtoList = commentList.stream().map(ResponseCommentDto::new).toList();
         return new ResponseDataDto<>(responseCommentDtoList);
     }

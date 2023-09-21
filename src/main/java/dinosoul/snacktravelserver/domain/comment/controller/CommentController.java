@@ -1,6 +1,7 @@
 package dinosoul.snacktravelserver.domain.comment.controller;
 
 import dinosoul.snacktravelserver.domain.comment.dto.RequestCommentDto;
+import dinosoul.snacktravelserver.domain.comment.dto.RequestSearchCommentDto;
 import dinosoul.snacktravelserver.domain.comment.service.CommentService;
 import dinosoul.snacktravelserver.global.dto.ResponseDataDto;
 import dinosoul.snacktravelserver.global.dto.ResponseStatusDto;
@@ -23,9 +24,9 @@ public class CommentController {
         return commentService.createComment(snackId, requestCommentDto, jwtUserDetails.getMember());
     }
 
-    @GetMapping("/comment/snack/{snackId}")
-    public ResponseDataDto<?> searchComment(@PathVariable Long snackId) {
-        return commentService.searchComment(snackId);
+    @PostMapping("/comment/snack")
+    public ResponseDataDto<?> searchComment(@RequestBody RequestSearchCommentDto requestSearchCommentDto) {
+        return commentService.searchComment(requestSearchCommentDto);
     }
 
     @DeleteMapping("/comment/{commentId}")

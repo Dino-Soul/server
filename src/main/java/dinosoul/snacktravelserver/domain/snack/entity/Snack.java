@@ -38,18 +38,20 @@ public class Snack extends Timestamped {
     @Column
     private Double longitude;
 
+    @Column
+    private String profileImageUrl;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
-
-    @OneToMany
-    @JoinColumn(name = "comment_id")
-    List<Comment> commentList = new ArrayList<>();
 
     public Snack(RequestSnackDto requestSnackDto, String videoUrl, Member member) {
         this.content = requestSnackDto.getContent();
         this.location = requestSnackDto.getLocation();
         this.videoUrl = videoUrl;
         this.member = member;
+        this.latitude = requestSnackDto.getLatitude();
+        this.longitude = requestSnackDto.getLongitude();
+        this.profileImageUrl = member.getProfileUrl();
     }
 }

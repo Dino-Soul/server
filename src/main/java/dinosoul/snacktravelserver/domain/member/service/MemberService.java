@@ -74,7 +74,6 @@ public class MemberService {
         findMember.update(requestInformationDto.getNickname(), passwordEncoder.encode(requestInformationDto.getPassword()), updateProfileImageUrl);
 
         String regenerationToken = jwtProvider.createAccessToken(findMember);
-        log.info("여기 들어오는가?");
         jwtProvider.addJwtToHeader(regenerationToken, response);
 
         return ResponseStatusDto.builder()
