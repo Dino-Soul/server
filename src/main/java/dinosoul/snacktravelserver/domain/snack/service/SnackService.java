@@ -31,7 +31,6 @@ public class SnackService {
     private final S3Service s3Service;
 
     public ResponseStatusDto createSnack(RequestSnackDto requestSnackDto, MultipartFile video, Member member) {
-        log.info("서비스는 들어오긴하는가?");
         String videoUrl = s3Service.upload(video);
         Snack snack = new Snack(requestSnackDto, videoUrl, member);
         snackRepository.save(snack);

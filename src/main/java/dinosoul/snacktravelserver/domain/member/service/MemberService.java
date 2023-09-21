@@ -8,7 +8,10 @@ import dinosoul.snacktravelserver.global.dto.ResponseDataDto;
 import dinosoul.snacktravelserver.global.dto.ResponseStatusDto;
 import dinosoul.snacktravelserver.global.globalenum.HttpStatusEnum;
 import dinosoul.snacktravelserver.global.util.IdenticonService;
+import dinosoul.snacktravelserver.global.util.JwtProvider;
 import dinosoul.snacktravelserver.global.util.S3Service;
+import io.jsonwebtoken.Jwt;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,6 +30,7 @@ public class MemberService {
     private final IdenticonService identiconService;
     private final S3Service s3Service;
     private final PasswordEncoder passwordEncoder;
+    private final JwtProvider jwtProvider;
 
     @Transactional
     public ResponseStatusDto signup(RequestSignupDto requestSignupDto) {
@@ -53,7 +57,8 @@ public class MemberService {
 
     @Transactional
     public ResponseStatusDto informationChange(RequestInformationDto requestInformationDto,
-                                               MultipartFile profileImage, Member member) {
+                                               MultipartFile profileImage, Member member,
+                                               HttpServletResponse response) {
 
         Member findMember = memberRepository.findById(member.getId()).orElseThrow(()
                 -> new IllegalArgumentException("존재하지 않는 유저 입니다."));
@@ -67,6 +72,10 @@ public class MemberService {
         String updateProfileImageUrl = s3Service.upload(profileImage);
 
         findMember.update(requestInformationDto.getNickname(), passwordEncoder.encode(requestInformationDto.getPassword()), updateProfileImageUrl);
+
+        String regenerationToken = jwtProvider.createAccessToken(findMember);
+        log.info("여기 들어오는가?");
+        jwtProvider.addJwtToHeader(regenerationToken, response);
 
         return ResponseStatusDto.builder()
                 .message(OK.getMessage())
