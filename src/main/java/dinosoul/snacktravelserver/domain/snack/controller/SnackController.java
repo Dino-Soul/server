@@ -22,7 +22,6 @@ public class SnackController {
     public ResponseStatusDto createSnack(@RequestPart(value = "data") RequestSnackDto requestSnackDto,
                                          @RequestPart(value = "file") MultipartFile video,
                                          @AuthenticationPrincipal JwtUserDetailsImpl jwtUserDetails) {
-        log.info("컨트롤에 들어오는가?");
         return snackService.createSnack(requestSnackDto, video, jwtUserDetails.getMember());
     }
 

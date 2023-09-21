@@ -5,6 +5,7 @@ import dinosoul.snacktravelserver.domain.member.dto.request.RequestSignupDto;
 import dinosoul.snacktravelserver.domain.member.service.MemberService;
 import dinosoul.snacktravelserver.global.dto.ResponseStatusDto;
 import dinosoul.snacktravelserver.global.jwt.JwtUserDetailsImpl;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,7 +27,8 @@ public class MemberController {
     @PutMapping("auth/information")
     public ResponseStatusDto informationChange(@RequestPart(value = "data") RequestInformationDto requestInformationDto,
                                                @RequestPart(value = "file") MultipartFile profileImage,
-                                               @AuthenticationPrincipal JwtUserDetailsImpl jwtUserDetails) {
-        return memberService.informationChange(requestInformationDto, profileImage, jwtUserDetails.getMember());
+                                               @AuthenticationPrincipal JwtUserDetailsImpl jwtUserDetails,
+                                               HttpServletResponse response) {
+        return memberService.informationChange(requestInformationDto, profileImage, jwtUserDetails.getMember(), response);
     }
 }

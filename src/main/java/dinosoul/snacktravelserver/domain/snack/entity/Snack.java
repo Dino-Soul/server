@@ -32,6 +32,12 @@ public class Snack extends Timestamped {
     @Column
     private String videoUrl;
 
+    @Column
+    private Double latitude;
+
+    @Column
+    private Double longitude;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
