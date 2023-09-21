@@ -68,6 +68,7 @@ public class WebSecurityFilter {
                 .sessionManagement(WebSecurityFilter::stateless)
                 .authorizeHttpRequests(authorizationRequest -> authorizationRequest
                         .requestMatchers("/auth/login", "/auth/signup").permitAll()
+                        .requestMatchers(POST, "/comments").permitAll()
                         .requestMatchers(GET, "/snack").permitAll()
                         .requestMatchers(GET, "/travlespot").permitAll()
                         .requestMatchers(GET, "/foodspot").permitAll()

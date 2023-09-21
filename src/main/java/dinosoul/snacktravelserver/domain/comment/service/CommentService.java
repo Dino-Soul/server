@@ -3,22 +3,27 @@ package dinosoul.snacktravelserver.domain.comment.service;
 import dinosoul.snacktravelserver.domain.comment.dto.RequestCommentDto;
 import dinosoul.snacktravelserver.domain.comment.dto.RequestSearchCommentDto;
 import dinosoul.snacktravelserver.domain.comment.dto.ResponseCommentDto;
+import dinosoul.snacktravelserver.domain.comment.dto.ResponseCommentInformationDto;
 import dinosoul.snacktravelserver.domain.comment.entity.Comment;
 import dinosoul.snacktravelserver.domain.comment.repository.CommentRepository;
 import dinosoul.snacktravelserver.domain.member.entity.Member;
 import dinosoul.snacktravelserver.domain.snack.entity.Snack;
 import dinosoul.snacktravelserver.domain.snack.repository.SnackRepository;
 import dinosoul.snacktravelserver.global.dto.ResponseDataDto;
+import dinosoul.snacktravelserver.global.dto.ResponseDatasDto;
 import dinosoul.snacktravelserver.global.dto.ResponseStatusDto;
 import dinosoul.snacktravelserver.global.globalenum.HttpStatusEnum;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static dinosoul.snacktravelserver.global.globalenum.HttpStatusEnum.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -32,8 +37,9 @@ public class CommentService {
 
         Comment comment = Comment.builder()
                 .nickname(member.getNickname())
-                .content(requestCommentDto.getComment())
+                .content(requestCommentDto.getContent())
                 .snackId(snackId)
+                .member(member)
                 .build();
 
         commentRepository.save(comment);
@@ -44,10 +50,22 @@ public class CommentService {
                 .build();
     }
 
-    public ResponseDataDto<?> searchComment(RequestSearchCommentDto requestSearchCommentDto) {
+    public ResponseDatasDto<?> searchComment(RequestSearchCommentDto requestSearchCommentDto) {
+        Snack findSnack = snackRepository.findById(requestSearchCommentDto.getSnackId()).orElseThrow(()
+                -> new IllegalArgumentException("존재하지 않는 스낵입니다."));
         List<Comment> commentList = commentRepository.findAllBySnackId(requestSearchCommentDto.getSnackId());
         List<ResponseCommentDto> responseCommentDtoList = commentList.stream().map(ResponseCommentDto::new).toList();
-        return new ResponseDataDto<>(responseCommentDtoList);
+        ResponseCommentInformationDto responseCommentInformationDto = ResponseCommentInformationDto.builder()
+                .snackId(findSnack.getId())
+                .content(findSnack.getContent())
+                .videoUrl(findSnack.getVideoUrl())
+                .nickname(findSnack.getMember().getNickname())
+                .latitude(findSnack.getLatitude())
+                .longitude(findSnack.getLongitude())
+                .profileImageUrl(findSnack.getProfileImageUrl())
+                .location(findSnack.getLocation())
+                .build();
+        return new ResponseDatasDto<>(responseCommentDtoList, responseCommentInformationDto);
     }
 
     @Transactional
